@@ -10,6 +10,7 @@ from src.neptune_benchmark.generate_run_data import generate_run_data, generate_
 from src.neptune_benchmark.auth import get_auth_tokens
 from src.neptune_benchmark.request import fetch_chart_data
 from src.neptune_benchmark.constants import SUBSET_LENGTH
+from src.neptune_benchmark.utils import BenchmarkConfig
 
 
 async def main():
@@ -24,24 +25,14 @@ async def main():
     access_token = auth_tokens.accessToken
     # refresh_token = auth_tokens.refreshToken
 
+    config = BenchmarkConfig(access_token, project)
+
     all_run_data = generate_run_data(project, token)
 
     client = httpx.AsyncClient(
-        params={
-            'projectIdentifier': project,
-        },
-        headers={
-            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0',
-            'Accept': '*/*',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'authorization': f'Bearer {access_token}',
-            'content-type': 'application/json',
-            'Origin': 'https://testing.stage.neptune.ai',
-            'Connection': 'keep-alive',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-origin',
-        })
+        params=config.params,
+        headers=config.headers
+    )
 
     async def single_task():
         subset = generate_run_data_subset(all_run_data, length=SUBSET_LENGTH)
