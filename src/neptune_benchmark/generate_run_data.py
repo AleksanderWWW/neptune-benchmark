@@ -1,7 +1,14 @@
-import pickle
-from typing import List, Dict
+__all__ = [
+    "generate_run_data",
+    "generate_run_data_subset",
+]
 
+import pickle
 from random import sample
+from typing import (
+    Dict,
+    List,
+)
 
 import neptune
 
@@ -28,5 +35,6 @@ def generate_run_data_subset(run_data: List[str], chart_id: int, length: int = 1
             "attributePath": f"charts/chart-{chart_id}",
             "holderIdentifier": run_id,
             "holderType": "experiment",
-        } for run_id in ids
+        }
+        for run_id in ids
     ]

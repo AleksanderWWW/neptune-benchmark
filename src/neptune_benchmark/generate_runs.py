@@ -1,3 +1,7 @@
+__all__ = [
+    "generate_runs",
+]
+
 import random
 
 import neptune
@@ -30,8 +34,9 @@ def add_charts_small(run, lr, chart_id):
         else:
             run[namespace].append(init_metric)
 
-        init_metric = init_metric - (init_metric - floor) * (1 - decay) + (random.random() - 0.5) * 0.005 * (
-            fluctuation) * 3
+        init_metric = (
+            init_metric - (init_metric - floor) * (1 - decay) + (random.random() - 0.5) * 0.005 * (fluctuation) * 3
+        )
 
         if init_metric > 1:
             init_metric = 0.99

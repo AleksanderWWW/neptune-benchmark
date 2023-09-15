@@ -1,7 +1,15 @@
+__all__ = [
+    "get_auth_tokens",
+]
+
 import os
 from typing import Optional
 
-from neptune.internal.backends.hosted_client import _get_token_client, get_client_config, BACKEND_SWAGGER_PATH
+from neptune.internal.backends.hosted_client import (
+    BACKEND_SWAGGER_PATH,
+    _get_token_client,
+    get_client_config,
+)
 from neptune.internal.backends.utils import build_operation_url
 from neptune.internal.credentials import Credentials
 
@@ -19,11 +27,11 @@ def get_auth_tokens(api_token: Optional[str] = None):
         endpoint_url = build_operation_url(client_config.api_url, BACKEND_SWAGGER_PATH)
 
     backend_client = _get_token_client(
-            credentials=credentials,
-            ssl_verify=True,
-            proxies={},
-            endpoint_url=endpoint_url,
-        )
+        credentials=credentials,
+        ssl_verify=True,
+        proxies={},
+        endpoint_url=endpoint_url,
+    )
 
     auth_tokens = backend_client.api.exchangeApiToken(X_Neptune_Api_Token=api_token).response().result
 

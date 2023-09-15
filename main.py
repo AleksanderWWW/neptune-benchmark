@@ -1,7 +1,11 @@
+from src.neptune_benchmark.config import BenchmarkConfig
+from src.neptune_benchmark.constants import (
+    CHART_URL,
+    NUM_REQUESTS,
+    SUBSET_LENGTH,
+)
 from src.neptune_benchmark.generate_run_data import generate_run_data
 from src.neptune_benchmark.request import fetch
-from src.neptune_benchmark.constants import SUBSET_LENGTH, NUM_REQUESTS, CHART_URL
-from src.neptune_benchmark.utils import BenchmarkConfig
 
 
 def main():
@@ -13,7 +17,7 @@ def main():
 
     responses = fetch(CHART_URL, all_run_data, NUM_REQUESTS, config, SUBSET_LENGTH)
 
-    execution_times = [r.elapsed.microseconds / 1e6 for r in responses]
+    execution_times = [r.elapsed.total_seconds() for r in responses]
     print(execution_times)
 
 
