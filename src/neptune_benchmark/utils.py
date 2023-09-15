@@ -1,11 +1,27 @@
+import os
 from typing import Dict
 from dataclasses import dataclass
+
+from dotenv import load_dotenv
+
+from src.neptune_benchmark.auth import get_auth_tokens
 
 
 @dataclass
 class BenchmarkConfig:
+    token: str
     access_token: str
     project: str
+
+    @classmethod
+    def from_env(cls) -> "BenchmarkConfig":
+        load_dotenv()
+        token = os.getenv("NEPTUNE_BENCHMARK_API_TOKEN")
+        project = os.getenv("NEPTUNE_BENCHMARK_PROJECT")
+        auth_tokens = get_auth_tokens(token)
+        access_token = auth_tokens.accessToken
+
+        return cls(token, access_token, project)
 
     @property
     def headers(self) -> Dict[str, str]:
