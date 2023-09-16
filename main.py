@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 
 from src.neptune_benchmark.config import BenchmarkConfig
 from src.neptune_benchmark.constants import (
@@ -6,26 +6,30 @@ from src.neptune_benchmark.constants import (
     NUM_REQUESTS,
     SUBSET_LENGTH,
 )
-from src.neptune_benchmark.generate_run_data import generate_run_data
+from src.neptune_benchmark.generate import generate_run_data
 from src.neptune_benchmark.request import fetch
+from src.neptune_benchmark.stats import StatsCollector
 
 
 def main():
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.DEBUG)
-
-    logging.info("Initializing configuration")
+    logger.info("Initializing configuration")
     config = BenchmarkConfig.from_env()
 
-    logging.info("Generating run data")
+    logger.info("Initializing statistics collector")
+    collector = StatsCollector()
+
+    logger.info("Generating run data")
     all_run_data = generate_run_data(config.project, config.token)
 
     assert len(all_run_data) == 5000
 
-    logging.info("Fetching chart data")
-    responses = fetch(CHART_URL, all_run_data, NUM_REQUESTS, config, SUBSET_LENGTH)
+    logger.info("Fetching chart data")
+    responses = fetch(CHART_URL, all_run_data, NUM_REQUESTS, config, collector, SUBSET_LENGTH)
 
     execution_times = [r.elapsed.total_seconds() for r in responses]
-    logging.info(execution_times)
+    collector.record_response_time_series(execution_times)
+
+    collector.to_json_file()
 
 
 if __name__ == "__main__":

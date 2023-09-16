@@ -3,7 +3,6 @@ __all__ = [
     "generate_run_data_subset",
 ]
 
-import logging
 import pickle
 from random import sample
 from typing import (
@@ -12,17 +11,18 @@ from typing import (
 )
 
 import neptune
+from loguru import logger
 
 from src.neptune_benchmark.constants import RUN_DATA_PATH
 
 
 def generate_run_data(project: str, api_token: str) -> List[str]:
     if RUN_DATA_PATH.exists():
-        logging.info("Reading from existing file: '%s'", str(RUN_DATA_PATH))
+        logger.info(f"Reading from existing file: '{str(RUN_DATA_PATH)}'")
         with open(RUN_DATA_PATH, "rb") as data_file:
             ids = pickle.load(data_file)
     else:
-        logging.info("Fetching data from project")
+        logger.info("Fetching data from project")
         RUN_DATA_PATH.parent.mkdir(exist_ok=True)
         with neptune.init_project(project, api_token=api_token) as neptune_project:
             ids = list(map(lambda x: x._id, neptune_project.fetch_runs_table().to_rows()))
