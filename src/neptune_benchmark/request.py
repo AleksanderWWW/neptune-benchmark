@@ -10,8 +10,8 @@ from loguru import logger
 from tqdm import tqdm
 
 from neptune_benchmark.config import BenchmarkConfig
-from neptune_benchmark.constants import DEFAULT_TIMEOUT
 from neptune_benchmark.generate import generate_run_data_subset
+from neptune_benchmark.settings import DEFAULT_TIMEOUT
 from neptune_benchmark.stats import StatsCollector
 
 
@@ -27,9 +27,9 @@ def fetch(
     async def fetch_data():
         with tqdm(total=num_requests) as pbar:
 
-            async def error_happened(error):
+            async def handle_error(error: Exception):
                 logger.error(f"Error: {error}")
-                collector.record_error()
+                collector.record_error(error)
                 empty_resp = requests.Response
                 empty_resp.elapsed = timedelta(microseconds=0)
                 pbar.update(1)
@@ -43,10 +43,10 @@ def fetch(
                         json=generate_run_data_subset(run_ids, chart_id, subset_length),
                     )
                     pbar.update(1)
-                    logger.info(f"Success :: status code: {resp.status_code}")
+                    logger.debug(f"Success :: status code: {resp.status_code}")
                     return resp
                 except (httpx.RemoteProtocolError, httpx.ReadError) as exc:
-                    return await error_happened(exc)
+                    return await handle_error(exc)
 
             async with httpx.AsyncClient(
                 params=config.params,

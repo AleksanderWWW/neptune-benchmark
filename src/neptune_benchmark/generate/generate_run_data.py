@@ -13,16 +13,16 @@ from typing import (
 import neptune
 from loguru import logger
 
-from neptune_benchmark.constants import RUN_DATA_PATH
+from neptune_benchmark.settings import RUN_DATA_PATH
 
 
 def generate_run_ids(project: str, api_token: str) -> List[str]:
     if RUN_DATA_PATH.exists():
-        logger.info(f"Reading from existing file: '{str(RUN_DATA_PATH)}'")
+        logger.debug(f"Reading from existing file: '{str(RUN_DATA_PATH)}'")
         with open(RUN_DATA_PATH, "rb") as data_file:
             ids = pickle.load(data_file)
     else:
-        logger.info("Fetching data from project")
+        logger.debug("Fetching data from project")
         RUN_DATA_PATH.parent.mkdir(exist_ok=True)
         with neptune.init_project(project, api_token=api_token) as neptune_project:
             ids = list(map(lambda x: x._id, neptune_project.fetch_runs_table().to_rows()))

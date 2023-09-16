@@ -1,19 +1,24 @@
+import sys
+
 from dotenv import load_dotenv
 from loguru import logger
 
 from neptune_benchmark.config import BenchmarkConfig
-from neptune_benchmark.constants import (
+from neptune_benchmark.generate import generate_run_ids
+from neptune_benchmark.request import fetch
+from neptune_benchmark.settings import (
     CHART_URL,
     LOAD_CONFIG_FROM_ENV,
+    LOGGING_LEVEL,
     NUM_REQUESTS,
     SUBSET_LENGTH,
 )
-from neptune_benchmark.generate import generate_run_ids
-from neptune_benchmark.request import fetch
 from neptune_benchmark.stats import StatsCollector
 
 
 def main():
+    logger.remove()
+    logger.add(sys.stdout, level=LOGGING_LEVEL)
     # ==================================================================================================================
     # Configuration
     # ==================================================================================================================
