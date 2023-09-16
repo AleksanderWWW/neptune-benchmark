@@ -65,8 +65,8 @@ class StatsCollector:
         self._processed = True
 
         return {
-            "requestSentCount": self.req_num,
-            "chartPerRequestCount": self.subset_len,
+            "requestsSentCount": self.req_num,
+            "chartsPerRequestCount": self.subset_len,
             "responseTimeSeries": self._resp_times,
             "meanResponseTime": self._mean_resp_time,
             "medianResponseTime": self._median_resp_time,

@@ -28,7 +28,7 @@ def fetch(
         with tqdm(total=num_requests) as pbar:
 
             async def error_happened(error):
-                logger.error(f"Error_happened: {error}")
+                logger.error(f"Error: {error}")
                 collector.record_error()
                 empty_resp = requests.Response
                 empty_resp.elapsed = timedelta(microseconds=0)
