@@ -7,6 +7,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+from datetime import datetime
 from pathlib import Path
 from statistics import (
     mean,
@@ -18,7 +19,9 @@ from typing import (
     Optional,
 )
 
-from src.neptune_benchmark.constants import (
+from loguru import logger
+
+from neptune_benchmark.constants import (
     NUM_REQUESTS,
     SUBSET_LENGTH,
 )
@@ -62,6 +65,8 @@ class StatsCollector:
         self._processed = True
 
         return {
+            "requestSentCount": self.req_num,
+            "chartPerRequestCount": self.subset_len,
             "responseTimeSeries": self._resp_times,
             "meanResponseTime": self._mean_resp_time,
             "medianResponseTime": self._median_resp_time,
@@ -72,8 +77,15 @@ class StatsCollector:
     def to_json(self) -> str:
         return json.dumps(self.summarize(), indent=4)
 
-    def to_json_file(self, file_name: Optional[str] = None) -> None:
-        file_name = file_name or "stats.json"
+    def to_json_file(self, file_path: Optional[str] = None) -> None:
+        file_path = file_path or f"stats/stats-{datetime.now().strftime('%Y-%m-%d::%H:%M:%S')}.json"
         json_str = self.to_json()
 
-        Path(file_name).write_text(json_str)
+        file_path = Path(file_path)
+
+        if not file_path.parent.exists():
+            logger.info(f"Creating '{str(file_path.parent)}' as it does not exist")
+            file_path.parent.mkdir()
+
+        logger.info(f"Writing stats to {str(file_path)}")
+        file_path.write_text(json_str)

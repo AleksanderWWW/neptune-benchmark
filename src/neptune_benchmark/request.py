@@ -9,15 +9,15 @@ import requests
 from loguru import logger
 from tqdm import tqdm
 
-from src.neptune_benchmark.config import BenchmarkConfig
-from src.neptune_benchmark.constants import DEFAULT_TIMEOUT
-from src.neptune_benchmark.generate import generate_run_data_subset
-from src.neptune_benchmark.stats import StatsCollector
+from neptune_benchmark.config import BenchmarkConfig
+from neptune_benchmark.constants import DEFAULT_TIMEOUT
+from neptune_benchmark.generate import generate_run_data_subset
+from neptune_benchmark.stats import StatsCollector
 
 
 def fetch(
     url: str,
-    run_data: List[str],
+    run_ids: List[str],
     num_requests: int,
     config: BenchmarkConfig,
     collector: StatsCollector,
@@ -40,7 +40,7 @@ def fetch(
                     await asyncio.sleep(1)
                     resp = await client.post(
                         url=url,
-                        json=generate_run_data_subset(run_data, chart_id, subset_length),
+                        json=generate_run_data_subset(run_ids, chart_id, subset_length),
                     )
                     pbar.update(1)
                     logger.info(f"Success :: status code: {resp.status_code}")

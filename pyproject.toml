@@ -1,3 +1,70 @@
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+pattern = "default-unprefixed"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+# Python lack of functionalities from future versions
+importlib-metadata = { version = "*", python = "<3.8" }
+
+httpx = { version = ">=0.25.0" }
+python-dotenv = { version = "1.0.0" }
+loguru = { version = ">=0.7.2" }
+tqdm = { version = ">=4.66.1" }
+neptune = { version = ">=1.6.0" }
+
+
+
+# dev
+pre-commit = { version = "*", optional = true }
+
+[tool.poetry.extras]
+dev = [
+    "pre-commit",
+]
+
+[tool.poetry]
+authors = ["Aleksander Wojnarowicz"]
+description = "Neptune.ai benchmark project"
+repository = "https://github.com/AleksanderWWW/neptune-benchmark"
+
+license = "Apache License 2.0"
+name = "neptune-benchmark"
+version = "0.0.0"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = [
+    "MLOps",
+    "ML Experiment Tracking",
+    "ML Model Registry",
+    "ML Model Store",
+    "ML Metadata Store",
+]
+packages = [
+    { include = "neptune_benchmark", from = "src" },
+]
+
+
 [tool.black]
 line-length = 120
 target-version = ['py37', 'py38', 'py39', 'py310']

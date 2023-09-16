@@ -6,9 +6,8 @@ import os
 from dataclasses import dataclass
 from typing import Dict
 
-from dotenv import load_dotenv
-
-from src.neptune_benchmark.auth import get_auth_tokens
+from neptune_benchmark.auth import get_auth_tokens
+from neptune_benchmark.cli import parse_args
 
 
 @dataclass
@@ -20,9 +19,21 @@ class BenchmarkConfig:
 
     @classmethod
     def from_env(cls) -> "BenchmarkConfig":
-        load_dotenv()
         token = os.getenv("NEPTUNE_BENCHMARK_API_TOKEN")
         project = os.getenv("NEPTUNE_BENCHMARK_PROJECT")
+
+        auth_tokens = get_auth_tokens(token)
+        access_token = auth_tokens.accessToken
+        refresh_token = auth_tokens.refreshToken
+
+        return cls(token, access_token, refresh_token, project)
+
+    @classmethod
+    def from_cli(cls) -> "BenchmarkConfig":
+        cli_args = parse_args()
+        token = cli_args.api_token
+        project = cli_args.project
+
         auth_tokens = get_auth_tokens(token)
         access_token = auth_tokens.accessToken
         refresh_token = auth_tokens.refreshToken
