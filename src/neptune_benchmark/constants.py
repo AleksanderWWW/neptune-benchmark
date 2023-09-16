@@ -1,6 +1,6 @@
 __all__ = [
     "CHART_URL",
-    "CONFIG_LOAD_STRATEGY",
+    "LOAD_CONFIG_FROM_ENV",
     "DEFAULT_TIMEOUT",
     "NUM_REQUESTS",
     "RUN_DATA_PATH",
@@ -14,4 +14,4 @@ NUM_REQUESTS = 200
 CHART_URL = "https://testing.stage.neptune.ai/api/leaderboard/v1/channels/view"
 RUN_DATA_PATH = Path("data/run_data.pkl")
 DEFAULT_TIMEOUT = 1000
-CONFIG_LOAD_STRATEGY = "env"
+LOAD_CONFIG_FROM_ENV = True
