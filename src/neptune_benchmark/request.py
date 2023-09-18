@@ -74,9 +74,9 @@ def fetch_all(
     chart_id: int = 0,
 ):
     for i in range(num_requests_per_client):
-        logger.info(f"Fetching data for request series no {i+1}")
+        logger.info(f"Fetching data for request series no {i+1}/{num_requests_per_client}")
         responses = fetch(url, run_ids, num_clients, config, collector, subset_length, chart_id)
-        logger.info(f"Fetched data for request series no {i+1}")
+        logger.info(f"Fetched data for request series no {i+1}/{num_requests_per_client}")
         execution_times = [r.elapsed.total_seconds() for r in responses]
         collector.record_response_time_series(execution_times)
-        logger.info(f"Recorded results for request series no {i+1}")
+        logger.info(f"Recorded results for request series no {i+1}/{num_requests_per_client}")

@@ -70,7 +70,7 @@ class StatsCollector:
         return {
             "requestsSentCount": len(self._resp_times),
             "chartsPerRequestCount": self.subset_len,
-            "responseTimeSeries": self._resp_times,
+            # "responseTimeSeries": self._resp_times,
             "percentiles": self._percentiles,
             "errorCount": self._error_count,
             "errorCauses": errors,
