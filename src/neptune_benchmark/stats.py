@@ -9,10 +9,6 @@ from dataclasses import (
 )
 from datetime import datetime
 from pathlib import Path
-from statistics import (
-    mean,
-    median,
-)
 from typing import (
     Any,
     Dict,
@@ -21,12 +17,10 @@ from typing import (
     Set,
 )
 
+import numpy as np
 from loguru import logger
 
-from neptune_benchmark.settings import (
-    NUM_REQUESTS,
-    SUBSET_LENGTH,
-)
+from neptune_benchmark.settings import SUBSET_LENGTH
 
 
 @dataclass
@@ -34,18 +28,14 @@ class StatsCollector:
     _resp_times: List[float] = field(default_factory=list)
     _errors: Set[str] = field(default_factory=set)
     _error_count: int = 0
-    _mean_resp_time: float = 0
-    _median_resp_time: float = 0
+    _percentiles: Dict[int, float] = field(default_factory=dict)
     _processed: bool = False
 
-    req_num: int = NUM_REQUESTS
     subset_len: int = SUBSET_LENGTH
 
     def reset(self) -> None:
         self._resp_times: List[float] = []
         self._error_count: int = 0
-        self._mean_resp_time: float = 0
-        self._median_resp_time = 0
         self._processed = False
 
     def record_error(self, error: Exception) -> None:
@@ -63,27 +53,28 @@ class StatsCollector:
 
     def summarize(self) -> Dict[str, Any]:
         if not self._processed:
-            non_zero_resp_times = list(filter(lambda x: x > 0, self._resp_times))
+            resp_times_array = np.array(self._resp_times)
+            non_zero_resp_times = resp_times_array[resp_times_array > 0]
 
-            if not non_zero_resp_times:  # all requests failed
+            if len(non_zero_resp_times) == 0:  # all requests failed
                 pass  # do not calculate statistics
             else:
-                self._mean_resp_time = mean(non_zero_resp_times)
-                self._median_resp_time = median(non_zero_resp_times)
+
+                for i in range(100):
+                    self._percentiles[i] = np.percentile(non_zero_resp_times, i)
 
         self._processed = True
 
-        errors = list(map(str, self._errors))
+        errors = list(self._errors)
 
         return {
-            "requestsSentCount": self.req_num,
+            "requestsSentCount": len(self._resp_times),
             "chartsPerRequestCount": self.subset_len,
             "responseTimeSeries": self._resp_times,
-            "meanResponseTime": self._mean_resp_time,
-            "medianResponseTime": self._median_resp_time,
+            "percentiles": self._percentiles,
             "errorCount": self._error_count,
             "errorCauses": errors,
-            "successCount": self.req_num - self._error_count,
+            "successCount": len(self._resp_times) - self._error_count,
         }
 
     def to_json(self) -> str:

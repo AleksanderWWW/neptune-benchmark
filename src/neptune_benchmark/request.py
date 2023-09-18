@@ -1,4 +1,4 @@
-__all__ = ["fetch"]
+__all__ = ["fetch_all"]
 
 import asyncio
 from datetime import timedelta
@@ -61,3 +61,22 @@ def fetch(
             return results
 
     return asyncio.run(fetch_data())
+
+
+def fetch_all(
+    url: str,
+    run_ids: List[str],
+    num_clients: int,
+    num_requests_per_client: int,
+    config: BenchmarkConfig,
+    collector: StatsCollector,
+    subset_length: int = 200,
+    chart_id: int = 0,
+):
+    for i in range(num_requests_per_client):
+        logger.info(f"Fetching data for request series no {i}")
+        responses = fetch(url, run_ids, num_clients, config, collector, subset_length, chart_id)
+        logger.info(f"Fetched data for request series no {i}")
+        execution_times = [r.elapsed.total_seconds() for r in responses]
+        collector.record_response_time_series(execution_times)
+        logger.info(f"Recorded results for request series no {i}")

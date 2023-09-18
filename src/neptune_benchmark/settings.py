@@ -3,7 +3,8 @@ __all__ = [
     "LOAD_CONFIG_FROM_ENV",
     "DEFAULT_TIMEOUT",
     "LOGGING_LEVEL",
-    "NUM_REQUESTS",
+    "NUM_CLIENTS",
+    "NUM_REQUESTS_PER_CLIENT",
     "RUN_DATA_PATH",
     "SUBSET_LENGTH",
 ]
@@ -14,7 +15,10 @@ from pathlib import Path
 SUBSET_LENGTH = 50
 
 # How many async requests with series data to send
-NUM_REQUESTS = 200
+NUM_CLIENTS = 200
+
+# How many requests will each client send
+NUM_REQUESTS_PER_CLIENT = 2
 
 # URL to fetch chart series data from
 CHART_URL = "https://testing.stage.neptune.ai/api/leaderboard/v1/channels/view"
@@ -29,4 +33,4 @@ DEFAULT_TIMEOUT = 1000
 LOAD_CONFIG_FROM_ENV = True
 
 # Logging level for `loguru`
-LOGGING_LEVEL = "DEBUG"
+LOGGING_LEVEL = "INFO"
