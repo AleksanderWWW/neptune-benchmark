@@ -42,7 +42,7 @@ class StatsCollector:
     subset_len: int = SUBSET_LENGTH
 
     def reset(self) -> None:
-        self._resp_times: list[float] = []
+        self._resp_times: List[float] = []
         self._error_count: int = 0
         self._mean_resp_time: float = 0
         self._median_resp_time = 0
