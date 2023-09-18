@@ -64,8 +64,12 @@ class StatsCollector:
     def summarize(self) -> Dict[str, Any]:
         if not self._processed:
             non_zero_resp_times = list(filter(lambda x: x > 0, self._resp_times))
-            self._mean_resp_time = mean(non_zero_resp_times)
-            self._median_resp_time = median(non_zero_resp_times)
+
+            if not non_zero_resp_times:  # all requests failed
+                pass  # do not calculate statistics
+            else:
+                self._mean_resp_time = mean(non_zero_resp_times)
+                self._median_resp_time = median(non_zero_resp_times)
 
         self._processed = True
 
