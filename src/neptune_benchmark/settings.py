@@ -11,7 +11,7 @@ __all__ = [
 from pathlib import Path
 
 # How many series to include in one request
-SUBSET_LENGTH = 100
+SUBSET_LENGTH = 200
 
 # How many async requests with series data to send
 NUM_REQUESTS = 200

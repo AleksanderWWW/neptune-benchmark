@@ -48,10 +48,12 @@ def fetch(
                 except (httpx.RemoteProtocolError, httpx.ReadError) as exc:
                     return await handle_error(exc)
 
+            limits = httpx.Limits(max_keepalive_connections=300, max_connections=300)
             async with httpx.AsyncClient(
                 params=config.params,
                 headers=config.headers,
                 timeout=DEFAULT_TIMEOUT,
+                limits=limits,
             ) as client:
                 reqs = [single_fetch() for _ in range(num_requests)]
                 results = await asyncio.gather(*reqs)
