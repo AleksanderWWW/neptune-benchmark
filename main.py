@@ -47,14 +47,15 @@ def main():
     # Fetch chart data
     # ==================================================================================================================
     logger.info("Fetching chart data")
-    responses = fetch(CHART_URL, all_run_ids, NUM_REQUESTS, config, collector, SUBSET_LENGTH)
+    for i in range(200):
+        responses = fetch(CHART_URL, all_run_ids, NUM_REQUESTS, config, collector, SUBSET_LENGTH)
 
-    # ==================================================================================================================
-    # Collect results
-    # ==================================================================================================================
-    execution_times = [r.elapsed.total_seconds() for r in responses]
-    logger.info("Recording response times")
-    collector.record_response_time_series(execution_times)
+        # ==================================================================================================================
+        # Collect results
+        # ==================================================================================================================
+        execution_times = [r.elapsed.total_seconds() for r in responses]
+        logger.info("Recording response times")
+        collector.record_response_time_series(execution_times)
 
     # ==================================================================================================================
     # Save results
