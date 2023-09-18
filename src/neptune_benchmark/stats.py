@@ -16,7 +16,9 @@ from statistics import (
 from typing import (
     Any,
     Dict,
+    List,
     Optional,
+    Set,
 )
 
 from loguru import logger
@@ -29,8 +31,8 @@ from neptune_benchmark.settings import (
 
 @dataclass
 class StatsCollector:
-    _resp_times: list[float] = field(default_factory=list)
-    _errors: set[str] = field(default_factory=set)
+    _resp_times: List[float] = field(default_factory=list)
+    _errors: Set[str] = field(default_factory=set)
     _error_count: int = 0
     _mean_resp_time: float = 0
     _median_resp_time: float = 0
