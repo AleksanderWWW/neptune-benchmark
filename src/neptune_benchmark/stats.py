@@ -58,7 +58,7 @@ class StatsCollector:
 
         self._resp_times.append(resp_time)
 
-    def record_response_time_series(self, series: list[float]) -> None:
+    def record_response_time_series(self, series: List[float]) -> None:
         self._resp_times.extend(series)
 
     def summarize(self) -> Dict[str, Any]:
