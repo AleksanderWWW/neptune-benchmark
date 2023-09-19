@@ -36,8 +36,8 @@ def fetch(
                 pbar.update(1)
                 return empty_resp
 
-            async def single_fetch(async_client: httpx.AsyncClient):
-                data = generate_run_data_subset(run_ids, chart_id, subset_length)
+            async def single_fetch(async_client: httpx.AsyncClient, data):
+
                 try:
                     start = time.perf_counter()
                     resp = await async_client.post(
@@ -58,7 +58,10 @@ def fetch(
                 timeout=DEFAULT_TIMEOUT,
                 limits=limits,
             ) as client:
-                reqs = [single_fetch(client) for _ in range(num_requests)]
+                reqs = [
+                    single_fetch(client, generate_run_data_subset(run_ids, chart_id, subset_length))
+                    for _ in range(num_requests)
+                ]
                 results = await asyncio.gather(*reqs)
 
         return results
