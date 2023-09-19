@@ -7,7 +7,8 @@ from neptune_benchmark.config import BenchmarkConfig
 from neptune_benchmark.generate import generate_run_ids
 from neptune_benchmark.request import fetch_all
 from neptune_benchmark.settings import (
-    CHART_URL,
+    CHART_ENDPOINT,
+    HOST,
     LOAD_CONFIG_FROM_ENV,
     LOGGING_LEVEL,
     NUM_CLIENTS,
@@ -48,7 +49,9 @@ def main():
     # Fetch chart data
     # ==================================================================================================================
     logger.info("Fetching chart data")
-    fetch_all(CHART_URL, all_run_ids, NUM_CLIENTS, NUM_REQUESTS_PER_CLIENT, config, collector, SUBSET_LENGTH)
+    fetch_all(
+        CHART_ENDPOINT + HOST, all_run_ids, NUM_CLIENTS, NUM_REQUESTS_PER_CLIENT, config, collector, SUBSET_LENGTH
+    )
     # ==================================================================================================================
     # Save results
     # ==================================================================================================================

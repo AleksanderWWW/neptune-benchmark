@@ -1,5 +1,6 @@
 __all__ = [
-    "CHART_URL",
+    "CHART_ENDPOINT",
+    "HOST",
     "LOAD_CONFIG_FROM_ENV",
     "DEFAULT_TIMEOUT",
     "LOGGING_LEVEL",
@@ -21,7 +22,8 @@ NUM_CLIENTS = 200
 NUM_REQUESTS_PER_CLIENT = 20
 
 # URL to fetch chart series data from
-CHART_URL = "https://testing.stage.neptune.ai/api/leaderboard/v1/channels/view"
+HOST = "https://testing.stage.neptune.ai"
+CHART_ENDPOINT = "/api/leaderboard/v1/channels/view"
 
 # Where to save generated run ids
 RUN_DATA_PATH = Path("data/run_data.pkl")
