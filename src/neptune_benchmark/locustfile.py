@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from locust import (
     FastHttpUser,
     between,
+    events,
     task,
 )
 
@@ -15,6 +16,18 @@ from neptune_benchmark.settings import (
     HOST,
     SUBSET_LENGTH,
 )
+
+stat_file = open("stats.csv", "w")
+
+
+@events.request_success.add_listener
+def hook_request_success(request_type, name, response_time, response_length, **kw):
+    stat_file.write(request_type + ";" + name + ";" + str(response_time) + ";" + str(response_length) + "\n")
+
+
+@events.quitting.add_listener
+def hook_quitting(environment, **kw):
+    stat_file.close()
 
 
 class NeptuneUser(FastHttpUser):
