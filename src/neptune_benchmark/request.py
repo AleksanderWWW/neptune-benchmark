@@ -1,7 +1,6 @@
 __all__ = ["fetch_all"]
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from typing import List
 
@@ -74,13 +73,11 @@ def fetch_all(
     subset_length: int = 200,
     chart_id: int = 0,
 ):
-    def task(task_no: int) -> None:
-        logger.info(f"Fetching data for request series no {task_no + 1}/{num_requests_per_client}")
+    for i in range(num_requests_per_client):
+
+        logger.info(f"Fetching data for request series no {i+1}/{num_requests_per_client}")
         responses = fetch(url, run_ids, num_clients, config, collector, subset_length, chart_id)
-        logger.info(f"Fetched data for request series no {task_no + 1}/{num_requests_per_client}")
+        logger.info(f"Fetched data for request series no {i+1}/{num_requests_per_client}")
         execution_times = [r.elapsed.total_seconds() for r in responses]
         collector.record_response_time_series(execution_times)
-        logger.info(f"Recorded results for request series no {task_no + 1}/{num_requests_per_client}")
-
-    with ThreadPoolExecutor(max_workers=30) as executor:
-        executor.map(task, range(num_requests_per_client))
+        logger.info(f"Recorded results for request series no {i+1}/{num_requests_per_client}")
