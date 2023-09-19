@@ -18,7 +18,7 @@ SUBSET_LENGTH = 50
 NUM_CLIENTS = 200
 
 # How many requests will each client send
-NUM_REQUESTS_PER_CLIENT = 2
+NUM_REQUESTS_PER_CLIENT = 20
 
 # URL to fetch chart series data from
 CHART_URL = "https://testing.stage.neptune.ai/api/leaderboard/v1/channels/view"
