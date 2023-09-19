@@ -37,11 +37,12 @@ def fetch(
                 return empty_resp
 
             async def single_fetch():
+                data = generate_run_data_subset(run_ids, chart_id, subset_length)
                 try:
                     start = time.perf_counter()
                     resp = await client.post(
                         url=url,
-                        json=generate_run_data_subset(run_ids, chart_id, subset_length),
+                        json=data,
                     )
                     collector.record_response_time(time.perf_counter() - start)
                     pbar.update(1)
