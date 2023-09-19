@@ -1,6 +1,7 @@
 __all__ = ["fetch_all"]
 
 import asyncio
+import time
 from datetime import timedelta
 from typing import List
 
@@ -37,11 +38,12 @@ def fetch(
 
             async def single_fetch():
                 try:
-                    await asyncio.sleep(1)
+                    start = time.perf_counter()
                     resp = await client.post(
                         url=url,
                         json=generate_run_data_subset(run_ids, chart_id, subset_length),
                     )
+                    collector.record_response_time(time.perf_counter() - start)
                     pbar.update(1)
                     logger.debug(f"Success :: status code: {resp.status_code}")
                     return resp
@@ -60,7 +62,7 @@ def fetch(
 
             return results
 
-    return asyncio.run(fetch_data())
+    asyncio.run(fetch_data())
 
 
 def fetch_all(
@@ -74,10 +76,6 @@ def fetch_all(
     chart_id: int = 0,
 ):
     for i in range(num_requests_per_client):
-
         logger.info(f"Fetching data for request series no {i+1}/{num_requests_per_client}")
-        responses = fetch(url, run_ids, num_clients, config, collector, subset_length, chart_id)
+        fetch(url, run_ids, num_clients, config, collector, subset_length, chart_id)
         logger.info(f"Fetched data for request series no {i+1}/{num_requests_per_client}")
-        execution_times = [r.elapsed.total_seconds() for r in responses]
-        collector.record_response_time_series(execution_times)
-        logger.info(f"Recorded results for request series no {i+1}/{num_requests_per_client}")
