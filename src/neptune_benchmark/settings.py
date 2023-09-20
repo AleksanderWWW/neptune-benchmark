@@ -1,11 +1,8 @@
 __all__ = [
     "CHART_ENDPOINT",
     "HOST",
-    "LOAD_CONFIG_FROM_ENV",
     "DEFAULT_TIMEOUT",
     "LOGGING_LEVEL",
-    "NUM_CLIENTS",
-    "NUM_REQUESTS_PER_CLIENT",
     "RUN_DATA_PATH",
     "SUBSET_LENGTH",
 ]
@@ -13,13 +10,7 @@ __all__ = [
 from pathlib import Path
 
 # How many series to include in one request
-SUBSET_LENGTH = 50
-
-# How many async requests with series data to send
-NUM_CLIENTS = 200
-
-# How many requests will each client send
-NUM_REQUESTS_PER_CLIENT = 20
+SUBSET_LENGTH = 200
 
 # URL to fetch chart series data from
 HOST = "https://testing.stage.neptune.ai"
@@ -30,9 +21,6 @@ RUN_DATA_PATH = Path("data/run_data.pkl")
 
 # Default timeout of the request
 DEFAULT_TIMEOUT = 1000
-
-# Whether the configuration (project, api_token...) is to be loaded from env
-LOAD_CONFIG_FROM_ENV = True
 
 # Logging level for `loguru`
 LOGGING_LEVEL = "INFO"

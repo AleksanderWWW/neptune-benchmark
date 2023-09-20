@@ -134,5 +134,5 @@ stream.bin
 # pickled run_ids
 data/
 
-# json file
-*.json
+# stats
+*.csv
