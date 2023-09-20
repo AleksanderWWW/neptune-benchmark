@@ -4,7 +4,7 @@ __all__ = [
 ]
 
 import pickle
-from random import sample
+import random
 from typing import (
     Dict,
     List,
@@ -31,8 +31,9 @@ def generate_run_ids(project: str, api_token: str) -> List[str]:
     return ids
 
 
-def generate_run_data_subset(run_data: List[str], chart_id: int, length: int = 10) -> List[Dict[str, str]]:
-    ids = sample(run_data, length)
+def generate_run_data_subset(run_data: List[str], max_chart_id: int, length: int = 10) -> List[Dict[str, str]]:
+    ids = random.sample(run_data, length)
+    chart_id = random.randint(0, max_chart_id)
     return [
         {
             "attributePath": f"charts/chart-{chart_id}",

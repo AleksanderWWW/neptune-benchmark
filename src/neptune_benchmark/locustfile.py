@@ -18,6 +18,7 @@ from neptune_benchmark.settings import (
     CHART_ENDPOINT,
     HOST,
     LOGGING_LEVEL,
+    NUM_CHARTS_PER_RUN,
     SUBSET_LENGTH,
 )
 
@@ -34,7 +35,7 @@ class NeptuneUser(FastHttpUser):
             CHART_ENDPOINT,
             params=self.config.params,
             headers=self.config.headers,
-            json=generate_run_data_subset(self.all_run_ids, 0, SUBSET_LENGTH),
+            json=generate_run_data_subset(self.all_run_ids, NUM_CHARTS_PER_RUN, SUBSET_LENGTH),
         )
 
     def on_start(self):
