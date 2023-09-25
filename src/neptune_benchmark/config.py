@@ -32,6 +32,7 @@ class BenchmarkConfig:
         return {
             "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0",
             "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "en-US,en;q=0.5",
             "authorization": f"Bearer {self.access_token}",
             "content-type": "application/json",
