@@ -4,6 +4,7 @@ __all__ = [
     "DEFAULT_TIMEOUT",
     "LOGGING_LEVEL",
     "NUM_CHARTS_PER_RUN",
+    "POINT_COUNT",
     "RUN_DATA_PATH",
     "SUBSET_LENGTH",
 ]
@@ -12,6 +13,9 @@ from pathlib import Path
 
 # How many series to include in one request
 SUBSET_LENGTH = 200
+
+# How many points in each series to fetch (max is 1000)
+POINT_COUNT = 1000
 
 # How many charts are present in each run
 NUM_CHARTS_PER_RUN = 4

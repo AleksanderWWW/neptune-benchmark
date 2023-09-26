@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Dict
 
 from neptune_benchmark.auth import get_auth_tokens
+from neptune_benchmark.settings import POINT_COUNT
 
 
 @dataclass
@@ -46,5 +47,6 @@ class BenchmarkConfig:
     @property
     def params(self) -> Dict[str, str]:
         return {
+            "pointCount": POINT_COUNT,
             "projectIdentifier": self.project,
         }
